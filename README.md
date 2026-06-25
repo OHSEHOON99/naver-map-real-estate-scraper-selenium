@@ -1,33 +1,97 @@
-# 네이버 지도 및 부동산 웹크롤링
+# Naver Map and Real Estate Scrapers
 
-이 프로젝트는 **파이썬 Selenium**을 활용하여 **네이버 지도** 및 **네이버 부동산** 데이터를 수집하는 웹크롤링 코드입니다.  
-웹크롤링 과정에서 **chromedriver**가 필요하며, 프로젝트를 실행하기 위해 다음 단계를 따라 진행하면 됩니다.
+Python Selenium examples for collecting structured data from Naver Map and
+Naver Real Estate.
 
----
+This repository is maintained as source code only. Browser drivers, raw crawl
+outputs, screenshots, and address-level result CSV files are intentionally not
+stored in Git.
 
-## 1. 환경 설정
+## What Changed
 
-### 필수 요구사항
-- Python 3.x 설치  
-- Google Chrome 브라우저 설치  
-- pip로 필요한 라이브러리 설치
+- Scrapers are packaged as reusable Python modules under `src/naver_scraper/`.
+- ChromeDriver is no longer committed. Selenium Manager can resolve the driver
+  automatically in recent Selenium versions, or you can pass a local driver path.
+- Real crawl outputs are ignored by Git. Tiny synthetic CSV examples live in
+  `examples/`.
+- The old hard-coded Windows user path was removed.
 
----
+## Requirements
 
-## 2. ChromeDriver 다운로드
+- Python 3.10+
+- Google Chrome
+- Network access to the target Naver pages
 
-### Step 1: 현재 사용하는 크롬 브라우저 버전 확인
-- 크롬 브라우저를 실행한 후, 우측 상단의 **설정** 아이콘(⋮) 클릭 → **도움말** → **Chrome 정보** 클릭  
-- 크롬 버전 번호 확인 (예: `116.0.5845.96`)
+Install dependencies:
 
-### Step 2: 해당 버전에 맞는 ChromeDriver 다운로드
-- **ChromeDriver 다운로드 페이지**로 이동  
-- 크롬 버전에 맞는 ChromeDriver 버전을 다운로드  
-- 압축을 해제한 후, 프로젝트 폴더 내에 **chromedriver** 실행 파일을 저장
+```bash
+python -m pip install -e .
+```
 
----
+If you prefer a plain requirements file:
 
-## 데이터 결과
+```bash
+python -m pip install -r requirements.txt
+```
 
-수집된 데이터는 `.csv` 파일로 저장되며, 네이버 지도 및 네이버 부동산에서 제공하는 정보가 포함됩니다.  
-예: `real_estate_data_서초동.csv`
+## Usage
+
+Create an output directory first:
+
+```bash
+mkdir -p outputs
+```
+
+Collect Naver Map cafe search results:
+
+```bash
+python -m naver_scraper.naver_map_cafes \
+  --query "서초구 카페" \
+  --output outputs/cafe_data.csv \
+  --max-pages 1
+```
+
+Collect Naver Real Estate listings for one administrative area:
+
+```bash
+python -m naver_scraper.naver_real_estate \
+  --city "서울시" \
+  --division "서초구" \
+  --section "서초동" \
+  --output outputs/real_estate_data.csv \
+  --max-complexes 5
+```
+
+If Selenium cannot resolve ChromeDriver automatically, pass a local driver:
+
+```bash
+python -m naver_scraper.naver_map_cafes \
+  --query "서초구 카페" \
+  --driver-path "/path/to/chromedriver" \
+  --output outputs/cafe_data.csv
+```
+
+## Repository Layout
+
+```text
+src/naver_scraper/
+  driver.py              Chrome driver setup
+  naver_map_cafes.py     Naver Map cafe scraper
+  naver_real_estate.py   Naver Real Estate listing scraper
+examples/
+  cafe_data_sample.csv
+  real_estate_data_sample.csv
+DATA_POLICY.md
+```
+
+## Responsible Use
+
+These scripts are for learning and research workflows. Before running them,
+review Naver's current terms, robots guidance, and applicable data policies.
+Use small request volumes, add delays, and do not republish raw crawl outputs
+that may contain address-level listings, business records, or other sensitive
+context.
+
+The target pages use dynamic selectors and may change without notice. If a
+selector stops working, update the relevant scraper module rather than committing
+new raw output files.
