@@ -1,0 +1,2 @@
+name,type,reviews,address,business_hours,packaging_available,pet_friendly,menus
+Sample Cafe,cafe,visitor reviews 0,Sample address,"[{""day"": ""Mon"", ""hours"": ""09:00-18:00""}]",true,false,"[""Americano"", ""Latte""]"

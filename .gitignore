@@ -1,0 +1,48 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Notebook/runtime noise
+.ipynb_checkpoints/
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Python packaging outputs
+*.egg-info/
+build/
+dist/
+
+# Browser drivers and downloaded binaries
+chromedriver*
+geckodriver*
+*.exe
+*.zip
+
+# Scraped data and generated outputs
+data/
+outputs/
+output/
+results/
+*.csv
+*.xlsx
+*.jsonl
+
+# Keep intentionally tiny example files
+!examples/*.csv
+
+# OS/editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
